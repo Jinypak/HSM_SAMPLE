@@ -1,0 +1,55 @@
+# **********************************************************************************
+#
+# Description: Windows makefile for P11Sample.
+#
+# Copyright (c) 2017-2020 SafeNet. All rights reserved.
+#
+# This file contains information that is proprietary to SafeNet and may not be
+# distributed or copied without written consent from SafeNet.
+#
+# **********************************************************************************
+
+# Using the cygwin toolset to build, ie: make, mkdir, etc.
+
+MACHINE = x64
+BUS = 64
+
+INCL = \
+		/I include
+
+OBJS = main.obj
+# sha3.obj smSample.obj 3gpp.obj
+
+CPP = cl
+LINK = link.exe
+
+# List all compiler options common to both debug and final
+# versions of your code here:
+CLFLAGS = \
+		/c /W3 /Gd /TP /MD /Fo"./" /FD /EHsc /nologo /Zi \
+		/D "WIN32" /D "_WINDOWS" /D "OS_WIN32" /D "_CRT_SECURE_NO_DEPRECATE"
+
+# List all linker options common to both debug and final
+# versions of your code here:
+LINKFLAGS = \
+		/OUT:"p11Sample.exe" /NOLOGO /STACK:32768 \
+		/SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /MACHINE:$(MACHINE) /ERRORREPORT:PROMPT
+
+p11Sample.exe: clean $(OBJS)
+	$(LINK) $(LINKFLAGS) $(OBJS)
+
+clean:
+	@-rm -f *.obj p11Sample.exe
+
+# Compile
+main.obj : source/main.c
+	$(CPP) $(CLFLAGS) $(INCL) source/main.c
+
+# sha3.obj : source/sha3.c
+#	$(CPP) $(CLFLAGS) $(INCL) source/sha3.c
+
+# smSample.obj : source/smSample.c
+#	$(CPP) $(CLFLAGS) $(INCL) source/smSample.c
+
+# 3gpp.obj : source/3gpp.c
+#	$(CPP) $(CLFLAGS) $(INCL) source/3gpp.c
